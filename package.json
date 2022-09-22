@@ -1,0 +1,35 @@
+{
+  "name": "clean-vue",
+  "private": true,
+  "version": "0.0.0",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "vue-tsc --noEmit && vite build",
+    "preview": "vite preview",
+    "lint:script": "eslint --ext .ts,vue --ignore-path .gitignore .",
+    "prepare": "husky install"
+  },
+  "lint-staged": {
+    "*.{ts,vue}": "npm run lint:script"
+  },
+  "dependencies": {
+    "vue": "^3.2.37"
+  },
+  "devDependencies": {
+    "@typescript-eslint/eslint-plugin": "^5.38.0",
+    "@typescript-eslint/parser": "^5.38.0",
+    "@vitejs/plugin-vue": "^3.1.0",
+    "@vue/eslint-config-prettier": "^7.0.0",
+    "@vue/eslint-config-typescript": "^11.0.1",
+    "eslint": "^8.23.1",
+    "eslint-plugin-prettier": "^4.2.1",
+    "eslint-plugin-vue": "^9.5.1",
+    "lint-staged": "^13.0.3",
+    "prettier": "^2.7.1",
+    "typescript": "^4.8.3",
+    "vite": "^3.1.0",
+    "vue-tsc": "^0.40.4",
+    "husky": "^8.0.0"
+  }
+}
