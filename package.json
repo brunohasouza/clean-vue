@@ -8,12 +8,13 @@
     "build": "vue-tsc --noEmit && vite build",
     "preview": "vite preview",
     "test": "vitest",
-    "test:coverage": "vitest run --coverage",
+    "test:ci": "vitest run --coverage",
+    "test:staged": "vitest related",
     "lint:script": "eslint --ext .ts,vue --ignore-path .gitignore .",
     "prepare": "husky install"
   },
   "lint-staged": {
-    "*.{ts,vue}": "npm run lint:script"
+    "*.{ts,vue}": ["npm run lint:script", "npm run test:staged"]
   },
   "dependencies": {
     "vue": "^3.2.37"
