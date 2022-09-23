@@ -8,23 +8,18 @@
     "allowSyntheticDefaultImports": true,
     "moduleResolution": "node",
     "isolatedModules": true,
-    "strict": true,
     "jsx": "preserve",
     "sourceMap": true,
     "baseUrl": ".",
     "paths": {
-			"@/*": ["./src/*"],
+      "@/*": ["./src/*"],
       "@domain/*": ["./src/domain/*"],
       "@data/*": ["./src/data/*"]
     },
-    "lib": ["esnext", "dom",
-      "dom.iterable",
-      "scripthost"],
+    "lib": ["esnext", "dom", "dom.iterable", "scripthost"],
     "types": ["vite/client"],
     "plugins": [{ "name": "@vuedx/typescript-plugin-vue" }]
   },
   "include": ["src/**/*.ts", "src/**/*.d.ts", "src/**/*.tsx", "src/**/*.vue"],
-  "exclude": [
-    "node_modules"
-  ]
+  "exclude": ["node_modules"]
 }
