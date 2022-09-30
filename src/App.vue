@@ -1,9 +1,7 @@
 <template>
-  <login-page></login-page>
+  <router-view></router-view>
 </template>
 
-<script setup lang="ts">
-  import LoginPage from '@/presentation/pages/LoginPage.vue'
-</script>
+<script setup lang="ts"></script>
 
 <style scoped></style>

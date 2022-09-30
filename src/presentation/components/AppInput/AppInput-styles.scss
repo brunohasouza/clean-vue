@@ -4,14 +4,4 @@
   .status {
     @apply absolute right-1.5 top-1/2 transform -translate-y-1/2;
   }
-
-  input[type='text'],
-  input[type='email'],
-  input[type='password'] {
-    @apply border border-solid border-primary-light leading-10 rounded w-full pl-4 pr-8;
-
-    &:focus {
-      @apply outline-primary-light shadow-none;
-    }
-  }
 }

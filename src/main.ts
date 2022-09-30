@@ -1,5 +1,10 @@
 import { createApp } from 'vue'
-import './style.scss'
+import './presentation/styles/tailwind.scss'
 import App from './App.vue'
+import router from './presentation/router'
 
-createApp(App).mount('#app')
+const app = createApp(App)
+
+app.use(router)
+
+app.mount('#app')
