@@ -1,5 +1,5 @@
 import path from 'path'
-import { defineConfig } from 'vite'
+import { defineConfig } from 'vitest/config'
 import vue from '@vitejs/plugin-vue'
 
 // https://vitejs.dev/config/
@@ -10,6 +10,9 @@ export default defineConfig({
         additionalData: `@import "@/presentation/styles/global.scss";`,
       },
     },
+  },
+  test: {
+    environment: 'happy-dom',
   },
   resolve: {
     alias: {
