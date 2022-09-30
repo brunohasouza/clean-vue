@@ -29,6 +29,7 @@ describe('AxiosHttpClient', () => {
     expect(mockedAxios.post).toHaveBeenCalledWith(request.url, request.body)
   })
 
+  // Falso positivo
   test.skip('Should return the correct statusCode and body', () => {
     const { sut, mockedAxios } = makeSut()
 

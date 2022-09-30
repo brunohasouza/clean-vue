@@ -1,0 +1,11 @@
+.errorWrap {
+  @apply flex flex-col mt-3.5 items-center;
+
+  &:empty {
+    @apply mt-0;
+  }
+
+  .error {
+    @apply text-sm font-medium text-primary-light;
+  }
+}

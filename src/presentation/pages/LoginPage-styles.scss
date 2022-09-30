@@ -1,0 +1,22 @@
+.loginPage {
+  @apply flex flex-col min-h-screen w-full justify-between bg-gray-100 gap-10;
+
+  form {
+    @apply flex flex-col w-96 rounded-lg p-10 self-center shadow bg-white gap-4;
+    button {
+      @apply bg-primary text-white rounded-lg text-base border-none h-[3.75rem] hover:opacity-90;
+    }
+
+    h2 {
+      @apply text-primary-dark text-center text-xl uppercase font-bold;
+    }
+
+    .submit {
+      @apply mt-4;
+    }
+
+    .link {
+      @apply text-center text-primary lowercase font-medium hover:underline cursor-pointer text-sm;
+    }
+  }
+}

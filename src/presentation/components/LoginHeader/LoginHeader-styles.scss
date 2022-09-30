@@ -1,0 +1,11 @@
+header {
+  @apply bg-primary flex flex-col border-t-[2.5rem] border-solid border-primary-dark items-center py-10 gap-4;
+
+  img {
+    @apply flex-none w-auto h-auto;
+  }
+
+  h1 {
+    @apply text-white font-semibold;
+  }
+}
