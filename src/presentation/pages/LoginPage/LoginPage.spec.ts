@@ -45,7 +45,7 @@ describe('Login Page', () => {
     expect(errorStatus.length).toBe(2)
   })
 
-  test('Showld call Validation with correct email', async () => {
+  test('Should call Validation with correct email', async () => {
     const { sut, validationSpy } = maketSut()
     const email = faker.internet.email()
 
@@ -58,7 +58,7 @@ describe('Login Page', () => {
     expect(validationSpy.fieldValue).toBe(email)
   })
 
-  test('Showld call Validation with correct password', async () => {
+  test('Should call Validation with correct password', async () => {
     const { sut, validationSpy } = maketSut()
     const password = faker.internet.password()
 
@@ -69,5 +69,25 @@ describe('Login Page', () => {
 
     expect(validationSpy.fieldName).toBe('password')
     expect(validationSpy.fieldValue).toBe(password)
+  })
+
+  test('Should show email error if Validation fails', async () => {
+    const { sut, validationSpy } = maketSut()
+    const errorMessage = faker.random.words()
+
+    validationSpy.errorMessage = errorMessage
+
+    const emailInput = sut.find('input[type="email"]')
+    emailInput.setValue(faker.internet.email())
+    await emailInput.trigger('input')
+
+    const emailStatus = sut
+      .findAllComponents({ name: 'AppInput' })
+      .find((c) => c.props().type === 'email')
+
+    const span = emailStatus.find('span')
+
+    expect(span.attributes('title')).toBe(errorMessage)
+    expect(span.element.textContent).toBe('🔴')
   })
 })
