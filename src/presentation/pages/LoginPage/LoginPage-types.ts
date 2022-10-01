@@ -4,4 +4,5 @@ export interface StateProps {
   emailError?: string
   passwordError?: string
   email: string
+  password: string
 }

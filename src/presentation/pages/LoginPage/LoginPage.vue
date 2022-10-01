@@ -15,6 +15,7 @@
         name="password"
         placeholder="Digite sua senha"
         :error="state.passwordError"
+        v-model="state.password"
       ></app-input>
       <button class="submit" type="submit" disabled>Entrar</button>
       <span class="link">Criar Conta</span>
@@ -47,6 +48,7 @@
     emailError: 'Campo obrigatório',
     passwordError: 'Campo obrigatório',
     email: '',
+    password: '',
   })
 
   provide('state', state)
@@ -55,6 +57,13 @@
     () => state.email,
     () => {
       props.validation.validate({ email: state.email })
+    }
+  )
+
+  watch(
+    () => state.password,
+    () => {
+      props.validation.validate({ password: state.password })
     }
   )
 </script>
