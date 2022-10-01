@@ -53,7 +53,7 @@ describe('Login Page', () => {
     expect(errorStatus.length).toBe(2)
   })
 
-  test('Showld call Validation with correct values', async () => {
+  test('Showld call Validation with correct email', async () => {
     const { sut, validationSpy } = maketSut()
 
     const emailInput = sut.find('input[type="email"]')
@@ -63,6 +63,19 @@ describe('Login Page', () => {
 
     expect(validationSpy.input).toEqual({
       email: 'any_email',
+    })
+  })
+
+  test('Showld call Validation with correct password', async () => {
+    const { sut, validationSpy } = maketSut()
+
+    const passwordInput = sut.find('input[type="password"]')
+    passwordInput.setValue('any_password')
+
+    await passwordInput.trigger('input')
+
+    expect(validationSpy.input).toEqual({
+      password: 'any_password',
     })
   })
 })
