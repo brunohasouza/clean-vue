@@ -7,13 +7,14 @@
         type="email"
         name="email"
         placeholder="Digite seu e-mail"
-        :error="errorState.emailError"
+        :error="state.emailError"
+        v-model="state.email"
       ></app-input>
       <app-input
         type="password"
         name="password"
         placeholder="Digite sua senha"
-        :error="errorState.passwordError"
+        :error="state.passwordError"
       ></app-input>
       <button class="submit" type="submit" disabled>Entrar</button>
       <span class="link">Criar Conta</span>
@@ -24,26 +25,38 @@
 </template>
 
 <script setup lang="ts">
-  import { provide, reactive } from 'vue'
+  import { provide, reactive, watch } from 'vue'
   import {
     LoginHeader,
     AppFooter,
     AppInput,
     FormStatus,
   } from '@/presentation/components'
-  import { StateProps, ErrorProps } from './LoginPage-types'
+  import { StateProps } from './LoginPage-types'
+  import { Validation } from '@/presentation/protocols/validation'
+
+  type LoginProps = {
+    validation: Validation
+  }
+
+  const props = defineProps<LoginProps>()
 
   const state: StateProps = reactive({
     isLoading: false,
-    errorMessage: '',
-  })
-
-  const errorState: ErrorProps = reactive({
+    mainError: '',
     emailError: 'Campo obrigatório',
     passwordError: 'Campo obrigatório',
+    email: '',
   })
 
   provide('state', state)
+
+  watch(
+    () => state.email,
+    () => {
+      props.validation.validate({ email: state.email })
+    }
+  )
 </script>
 
 <style scoped>

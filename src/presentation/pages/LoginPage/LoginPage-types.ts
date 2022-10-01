@@ -1,9 +1,7 @@
 export interface StateProps {
   isLoading: boolean
-  errorMessage?: string
-}
-
-export interface ErrorProps {
+  mainError?: string
   emailError?: string
   passwordError?: string
+  email: string
 }

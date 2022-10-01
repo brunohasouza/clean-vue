@@ -1,9 +1,7 @@
 <template>
   <div class="errorWrap">
     <app-spinner v-if="state.isLoading"></app-spinner>
-    <span v-if="state.errorMessage" class="error">{{
-      state.errorMessage
-    }}</span>
+    <span v-if="state.mainError" class="error">{{ state.mainError }}</span>
   </div>
 </template>
 
