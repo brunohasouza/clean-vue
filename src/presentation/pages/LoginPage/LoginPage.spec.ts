@@ -31,14 +31,9 @@ describe('Login Page', () => {
     const formStatus = sut.findComponent({ name: 'FormStatus' })
     const submitBtn = sut.find('button[type="submit"]')
     const fieldStatus = sut.findAllComponents({ name: 'AppInput' })
-    const errorStatus = fieldStatus.filter((value: VueWrapper) => {
-      const span = value.find('span.status')
-
-      return (
-        span.element.textContent === '🔴' &&
-        span.attributes('title') === 'Campo obrigatório'
-      )
-    })
+    const errorStatus = fieldStatus.filter(
+      (value: VueWrapper) => !!value.find('span.status')
+    )
 
     expect(formStatus.element.childElementCount).toBe(0)
     expect(submitBtn.attributes().disabled).toBeDefined()
@@ -86,6 +81,27 @@ describe('Login Page', () => {
       .find((c) => c.props().type === 'email')
 
     const span = emailStatus.find('span')
+
+    expect(span.attributes('title')).toBe(errorMessage)
+    expect(span.element.textContent).toBe('🔴')
+  })
+
+  test('Should show password error if Validation fails', async () => {
+    const { sut, validationSpy } = maketSut()
+    const errorMessage = faker.random.words()
+
+    validationSpy.errorMessage = errorMessage
+
+    const passwordInput = sut.find('input[type="password"]')
+    passwordInput.setValue(faker.internet.password())
+
+    await passwordInput.trigger('input')
+
+    const passwordStatus = sut
+      .findAllComponents({ name: 'AppInput' })
+      .find((c) => c.props().type === 'password')
+
+    const span = passwordStatus.find('span')
 
     expect(span.attributes('title')).toBe(errorMessage)
     expect(span.element.textContent).toBe('🔴')
