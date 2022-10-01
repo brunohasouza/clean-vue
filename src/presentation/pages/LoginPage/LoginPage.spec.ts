@@ -12,6 +12,7 @@ type SutTypes = {
 
 const maketSut = (): SutTypes => {
   const validationSpy = new ValidationSpy()
+  validationSpy.errorMessage = faker.random.words()
 
   const sut = mount(LoginPage, {
     props: {
@@ -31,9 +32,11 @@ describe('Login Page', () => {
     const formStatus = sut.findComponent({ name: 'FormStatus' })
     const submitBtn = sut.find('button[type="submit"]')
     const fieldStatus = sut.findAllComponents({ name: 'AppInput' })
-    const errorStatus = fieldStatus.filter(
-      (value: VueWrapper) => !!value.find('span.status')
-    )
+    const errorStatus = fieldStatus.filter((value: VueWrapper) => {
+      const span = value.find('span.status')
+
+      return span.element.textContent === '🔴'
+    })
 
     expect(formStatus.element.childElementCount).toBe(0)
     expect(submitBtn.attributes().disabled).toBeDefined()
@@ -68,9 +71,6 @@ describe('Login Page', () => {
 
   test('Should show email error if Validation fails', async () => {
     const { sut, validationSpy } = maketSut()
-    const errorMessage = faker.random.words()
-
-    validationSpy.errorMessage = errorMessage
 
     const emailInput = sut.find('input[type="email"]')
     emailInput.setValue(faker.internet.email())
@@ -82,15 +82,12 @@ describe('Login Page', () => {
 
     const span = emailStatus.find('span')
 
-    expect(span.attributes('title')).toBe(errorMessage)
+    expect(span.attributes('title')).toBe(validationSpy.errorMessage)
     expect(span.element.textContent).toBe('🔴')
   })
 
   test('Should show password error if Validation fails', async () => {
     const { sut, validationSpy } = maketSut()
-    const errorMessage = faker.random.words()
-
-    validationSpy.errorMessage = errorMessage
 
     const passwordInput = sut.find('input[type="password"]')
     passwordInput.setValue(faker.internet.password())
@@ -103,7 +100,45 @@ describe('Login Page', () => {
 
     const span = passwordStatus.find('span')
 
-    expect(span.attributes('title')).toBe(errorMessage)
+    expect(span.attributes('title')).toBe(validationSpy.errorMessage)
     expect(span.element.textContent).toBe('🔴')
+  })
+
+  test('Should show valid password state if Validation succeeds', async () => {
+    const { sut, validationSpy } = maketSut()
+    validationSpy.errorMessage = null
+
+    const passwordInput = sut.find('input[type="password"]')
+    passwordInput.setValue(faker.internet.password())
+
+    await passwordInput.trigger('input')
+
+    const passwordStatus = sut
+      .findAllComponents({ name: 'AppInput' })
+      .find((c) => c.props().type === 'password')
+
+    const span = passwordStatus.find('span')
+
+    expect(span.attributes('title')).toBe('Tudo certo!')
+    expect(span.element.textContent).toBe('🟢')
+  })
+
+  test('Should show valid email state if Validation succeeds', async () => {
+    const { sut, validationSpy } = maketSut()
+    validationSpy.errorMessage = null
+
+    const passwordInput = sut.find('input[type="password"]')
+    passwordInput.setValue(faker.internet.password())
+
+    await passwordInput.trigger('input')
+
+    const passwordStatus = sut
+      .findAllComponents({ name: 'AppInput' })
+      .find((c) => c.props().type === 'password')
+
+    const span = passwordStatus.find('span')
+
+    expect(span.attributes('title')).toBe('Tudo certo!')
+    expect(span.element.textContent).toBe('🟢')
   })
 })
