@@ -10,6 +10,10 @@
 
     .submit {
       @apply mt-4;
+
+      &:disabled {
+        @apply bg-zinc-300 hover:opacity-100 cursor-default text-zinc-600;
+      }
     }
 
     .link {

@@ -13,7 +13,7 @@
         name="password"
         placeholder="Digite sua senha"
       ></app-input>
-      <button class="submit" type="submit">Entrar</button>
+      <button class="submit" type="submit" disabled>Entrar</button>
       <span class="link">Criar Conta</span>
       <form-status></form-status>
     </form>
