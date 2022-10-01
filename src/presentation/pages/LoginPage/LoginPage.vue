@@ -56,14 +56,14 @@
   watch(
     () => state.email,
     () => {
-      props.validation.validate({ email: state.email })
+      props.validation.validate('email', state.email)
     }
   )
 
   watch(
     () => state.password,
     () => {
-      props.validation.validate({ password: state.password })
+      props.validation.validate('password', state.password)
     }
   )
 </script>

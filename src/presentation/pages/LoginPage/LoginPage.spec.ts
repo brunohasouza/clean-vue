@@ -5,10 +5,13 @@ import LoginPage from './LoginPage.vue'
 import { Validation } from '@/presentation/protocols/validation'
 class ValidationSpy implements Validation {
   errorMessage: string
-  input: object
+  fieldName: string
+  fieldValue: string
 
-  validate(input: object): string {
-    this.input = input
+  validate(fieldName: string, fieldValue: string): string {
+    this.fieldName = fieldName
+    this.fieldValue = fieldValue
+
     return this.errorMessage
   }
 }
@@ -61,9 +64,8 @@ describe('Login Page', () => {
 
     await emailInput.trigger('input')
 
-    expect(validationSpy.input).toEqual({
-      email: 'any_email',
-    })
+    expect(validationSpy.fieldName).toBe('email')
+    expect(validationSpy.fieldValue).toBe('any_email')
   })
 
   test('Showld call Validation with correct password', async () => {
@@ -74,8 +76,7 @@ describe('Login Page', () => {
 
     await passwordInput.trigger('input')
 
-    expect(validationSpy.input).toEqual({
-      password: 'any_password',
-    })
+    expect(validationSpy.fieldName).toBe('password')
+    expect(validationSpy.fieldValue).toBe('any_password')
   })
 })
