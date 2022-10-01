@@ -56,7 +56,7 @@
   watch(
     () => state.email,
     () => {
-      props.validation.validate('email', state.email)
+      state.emailError = props.validation.validate('email', state.email)
     }
   )
 
