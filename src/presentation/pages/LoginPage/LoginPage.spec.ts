@@ -3,12 +3,24 @@ import { mount, VueWrapper } from '@vue/test-utils'
 
 import LoginPage from './LoginPage.vue'
 
+type SutTypes = {
+  sut: VueWrapper
+}
+
+const maketSut = (): SutTypes => {
+  const sut = mount(LoginPage)
+
+  return {
+    sut,
+  }
+}
+
 describe('Login Page', () => {
   test('Should start with initial state', () => {
-    const wrapper = mount(LoginPage)
-    const formStatus = wrapper.findComponent({ name: 'FormStatus' })
-    const submitBtn = wrapper.find('button[type="submit"]')
-    const fieldStatus = wrapper.findAllComponents({ name: 'AppInput' })
+    const { sut } = maketSut()
+    const formStatus = sut.findComponent({ name: 'FormStatus' })
+    const submitBtn = sut.find('button[type="submit"]')
+    const fieldStatus = sut.findAllComponents({ name: 'AppInput' })
     const errorStatus = fieldStatus.filter((value: VueWrapper) => {
       const span = value.find('span.status')
 
