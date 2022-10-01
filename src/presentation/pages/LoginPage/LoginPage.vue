@@ -45,8 +45,8 @@
   const state: StateProps = reactive({
     isLoading: false,
     mainError: '',
-    emailError: 'Campo obrigatório',
-    passwordError: 'Campo obrigatório',
+    emailError: '',
+    passwordError: '',
     email: '',
     password: '',
   })
@@ -63,7 +63,10 @@
   watch(
     () => state.password,
     () => {
-      props.validation.validate('password', state.password)
+      state.passwordError = props.validation.validate(
+        'password',
+        state.password
+      )
     }
   )
 </script>
