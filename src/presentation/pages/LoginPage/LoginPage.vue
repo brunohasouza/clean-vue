@@ -45,8 +45,8 @@
   const state: StateProps = reactive({
     isLoading: false,
     mainError: '',
-    emailError: '',
-    passwordError: '',
+    emailError: 'Campo obrigatório',
+    passwordError: 'Campo obrigatório',
     email: '',
     password: '',
   })

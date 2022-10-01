@@ -6,7 +6,9 @@
       :name="name"
       :placeholder="placeholder"
     />
-    <span v-if="error" class="status" :title="error">🔴</span>
+    <span class="status" :title="error || 'Tudo certo!'">{{
+      !!error ? '🔴' : '🟢'
+    }}</span>
   </div>
 </template>
 
