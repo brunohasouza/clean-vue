@@ -22,12 +22,21 @@
 </template>
 
 <script setup lang="ts">
+  import { provide, reactive } from 'vue'
   import {
     LoginHeader,
     AppFooter,
     AppInput,
     FormStatus,
   } from '@/presentation/components'
+  import { StateProps } from './LoginPage-types'
+
+  const state: StateProps = reactive({
+    isLoading: false,
+    errorMessage: '',
+  })
+
+  provide('state', state)
 </script>
 
 <style scoped>
