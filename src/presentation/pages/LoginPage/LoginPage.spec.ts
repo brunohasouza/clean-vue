@@ -2,16 +2,34 @@ import { describe, test, expect } from 'vitest'
 import { mount, VueWrapper } from '@vue/test-utils'
 
 import LoginPage from './LoginPage.vue'
+import { Validation } from '@/presentation/protocols/validation'
+class ValidationSpy implements Validation {
+  errorMessage: string
+  input: object
+
+  validate(input: object): string {
+    this.input = input
+    return this.errorMessage
+  }
+}
 
 type SutTypes = {
   sut: VueWrapper
+  validationSpy: ValidationSpy
 }
 
 const maketSut = (): SutTypes => {
-  const sut = mount(LoginPage)
+  const validationSpy = new ValidationSpy()
+
+  const sut = mount(LoginPage, {
+    props: {
+      validation: validationSpy,
+    },
+  })
 
   return {
     sut,
+    validationSpy,
   }
 }
 
@@ -33,5 +51,18 @@ describe('Login Page', () => {
     expect(formStatus.element.childElementCount).toBe(0)
     expect(submitBtn.attributes().disabled).toBeDefined()
     expect(errorStatus.length).toBe(2)
+  })
+
+  test('Showld call Validation with correct values', async () => {
+    const { sut, validationSpy } = maketSut()
+
+    const emailInput = sut.find('input[type="email"]')
+    emailInput.setValue('any_email')
+
+    await emailInput.trigger('input')
+
+    expect(validationSpy.input).toEqual({
+      email: 'any_email',
+    })
   })
 })
