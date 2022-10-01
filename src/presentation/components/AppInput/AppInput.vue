@@ -6,7 +6,7 @@
       :name="name"
       :placeholder="placeholder"
     />
-    <span class="status">🔴</span>
+    <span v-if="error" class="status" :title="error">🔴</span>
   </div>
 </template>
 
@@ -18,6 +18,7 @@
     name?: string
     type?: string
     placeholder?: string
+    error?: string
   }
 
   interface Emits {

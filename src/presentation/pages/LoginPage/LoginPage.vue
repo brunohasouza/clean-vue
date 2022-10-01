@@ -7,11 +7,13 @@
         type="email"
         name="email"
         placeholder="Digite seu e-mail"
+        :error="errorState.emailError"
       ></app-input>
       <app-input
         type="password"
         name="password"
         placeholder="Digite sua senha"
+        :error="errorState.passwordError"
       ></app-input>
       <button class="submit" type="submit" disabled>Entrar</button>
       <span class="link">Criar Conta</span>
@@ -29,11 +31,16 @@
     AppInput,
     FormStatus,
   } from '@/presentation/components'
-  import { StateProps } from './LoginPage-types'
+  import { StateProps, ErrorProps } from './LoginPage-types'
 
   const state: StateProps = reactive({
     isLoading: false,
     errorMessage: '',
+  })
+
+  const errorState: ErrorProps = reactive({
+    emailError: 'Campo obrigatório',
+    passwordError: 'Campo obrigatório',
   })
 
   provide('state', state)
