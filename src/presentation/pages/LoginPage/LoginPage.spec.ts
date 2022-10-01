@@ -3,6 +3,7 @@ import { mount, VueWrapper } from '@vue/test-utils'
 
 import LoginPage from './LoginPage.vue'
 import { ValidationSpy } from '@/presentation/test'
+import { faker } from '@faker-js/faker'
 
 type SutTypes = {
   sut: VueWrapper
@@ -46,25 +47,27 @@ describe('Login Page', () => {
 
   test('Showld call Validation with correct email', async () => {
     const { sut, validationSpy } = maketSut()
+    const email = faker.internet.email()
 
     const emailInput = sut.find('input[type="email"]')
-    emailInput.setValue('any_email')
+    emailInput.setValue(email)
 
     await emailInput.trigger('input')
 
     expect(validationSpy.fieldName).toBe('email')
-    expect(validationSpy.fieldValue).toBe('any_email')
+    expect(validationSpy.fieldValue).toBe(email)
   })
 
   test('Showld call Validation with correct password', async () => {
     const { sut, validationSpy } = maketSut()
+    const password = faker.internet.password()
 
     const passwordInput = sut.find('input[type="password"]')
-    passwordInput.setValue('any_password')
+    passwordInput.setValue(password)
 
     await passwordInput.trigger('input')
 
     expect(validationSpy.fieldName).toBe('password')
-    expect(validationSpy.fieldValue).toBe('any_password')
+    expect(validationSpy.fieldValue).toBe(password)
   })
 })
