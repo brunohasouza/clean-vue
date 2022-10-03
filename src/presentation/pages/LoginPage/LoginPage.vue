@@ -1,7 +1,7 @@
 <template>
   <div class="loginPage">
     <login-header v-once></login-header>
-    <form>
+    <form @submit.prevent="handleSubmit">
       <h2>Login</h2>
       <app-input
         type="email"
@@ -17,16 +17,19 @@
         :error="state.passwordError"
         v-model="state.password"
       ></app-input>
-      <button class="submit" type="submit" disabled>Entrar</button>
+      <button class="submit" type="submit" :disabled="disabled">Entrar</button>
       <span class="link">Criar Conta</span>
-      <form-status></form-status>
+      <form-status
+        :loading="state.isLoading"
+        :error="state.mainError"
+      ></form-status>
     </form>
     <app-footer v-once></app-footer>
   </div>
 </template>
 
 <script setup lang="ts">
-  import { provide, reactive, watch } from 'vue'
+  import { provide, reactive, watch, computed } from 'vue'
   import {
     LoginHeader,
     AppFooter,
@@ -51,7 +54,15 @@
     password: '',
   })
 
-  provide('state', state)
+  const disabled = computed<boolean>(
+    () => !!state.emailError || !!state.passwordError
+  )
+
+  const handleSubmit = (): void => {
+    state.isLoading = true
+  }
+
+  provide('$state', () => state)
 
   watch(
     () => state.email,

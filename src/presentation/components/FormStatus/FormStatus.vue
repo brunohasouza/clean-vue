@@ -1,16 +1,25 @@
 <template>
   <div class="errorWrap">
-    <app-spinner v-if="state.isLoading"></app-spinner>
-    <span v-if="state.mainError" class="error">{{ state.mainError }}</span>
+    <app-spinner v-if="loading"></app-spinner>
+    <span v-else-if="error" class="error">{{ error }}</span>
   </div>
 </template>
 
 <script setup lang="ts">
-  import { inject } from 'vue'
+  import { watch } from 'vue'
   import { AppSpinner } from '@/presentation/components'
-  import { StateProps } from '@/presentation/pages/LoginPage/LoginPage-types'
 
-  const state = inject<StateProps>('state')
+  interface Props {
+    loading: boolean
+    error: string
+  }
+
+  const props = defineProps<Props>()
+
+  watch(
+    () => props.loading,
+    () => console.log(props.loading)
+  )
 </script>
 
 <style scoped>
