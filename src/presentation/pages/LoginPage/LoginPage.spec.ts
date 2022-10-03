@@ -47,10 +47,7 @@ describe('Login Page', () => {
     const { sut, validationSpy } = maketSut()
     const email = faker.internet.email()
 
-    const emailInput = sut.find('input[type="email"]')
-    emailInput.setValue(email)
-
-    await emailInput.trigger('input')
+    await sut.find('input[type="email"]').setValue(email)
 
     expect(validationSpy.fieldName).toBe('email')
     expect(validationSpy.fieldValue).toBe(email)
@@ -60,10 +57,7 @@ describe('Login Page', () => {
     const { sut, validationSpy } = maketSut()
     const password = faker.internet.password()
 
-    const passwordInput = sut.find('input[type="password"]')
-    passwordInput.setValue(password)
-
-    await passwordInput.trigger('input')
+    await sut.find('input[type="password"]').setValue(password)
 
     expect(validationSpy.fieldName).toBe('password')
     expect(validationSpy.fieldValue).toBe(password)
@@ -72,9 +66,7 @@ describe('Login Page', () => {
   test('Should show email error if Validation fails', async () => {
     const { sut, validationSpy } = maketSut()
 
-    const emailInput = sut.find('input[type="email"]')
-    emailInput.setValue(faker.internet.email())
-    await emailInput.trigger('input')
+    await sut.find('input[type="email"]').setValue(faker.internet.email())
 
     const emailStatus = sut
       .findAllComponents({ name: 'AppInput' })
@@ -89,10 +81,7 @@ describe('Login Page', () => {
   test('Should show password error if Validation fails', async () => {
     const { sut, validationSpy } = maketSut()
 
-    const passwordInput = sut.find('input[type="password"]')
-    passwordInput.setValue(faker.internet.password())
-
-    await passwordInput.trigger('input')
+    await sut.find('input[type="password"]').setValue(faker.internet.password())
 
     const passwordStatus = sut
       .findAllComponents({ name: 'AppInput' })
@@ -108,10 +97,7 @@ describe('Login Page', () => {
     const { sut, validationSpy } = maketSut()
     validationSpy.errorMessage = null
 
-    const passwordInput = sut.find('input[type="password"]')
-    passwordInput.setValue(faker.internet.password())
-
-    await passwordInput.trigger('input')
+    await sut.find('input[type="password"]').setValue(faker.internet.password())
 
     const passwordStatus = sut
       .findAllComponents({ name: 'AppInput' })
@@ -127,10 +113,7 @@ describe('Login Page', () => {
     const { sut, validationSpy } = maketSut()
     validationSpy.errorMessage = null
 
-    const passwordInput = sut.find('input[type="password"]')
-    passwordInput.setValue(faker.internet.password())
-
-    await passwordInput.trigger('input')
+    await sut.find('input[type="password"]').setValue(faker.internet.password())
 
     const passwordStatus = sut
       .findAllComponents({ name: 'AppInput' })
@@ -140,5 +123,30 @@ describe('Login Page', () => {
 
     expect(span.attributes('title')).toBe('Tudo certo!')
     expect(span.element.textContent).toBe('🟢')
+  })
+
+  test('Should enable submit button if form is valid', async () => {
+    const { sut, validationSpy } = maketSut()
+    validationSpy.errorMessage = null
+
+    await sut.find('input[type="email"]').setValue(faker.internet.email())
+    await sut.find('input[type="password"]').setValue(faker.internet.password())
+
+    const submitButton = sut.find('button[type="submit"]')
+    expect(submitButton.attributes('disabled')).toBe('false')
+  })
+
+  test('Should show spinner on submit', async () => {
+    const { sut, validationSpy } = maketSut()
+    validationSpy.errorMessage = null
+
+    await sut.find('input[type="email"]').setValue(faker.internet.email())
+    await sut.find('input[type="password"]').setValue(faker.internet.password())
+
+    await sut.find('form').trigger('submit.prevent')
+
+    const spinner = sut.findComponent({ name: 'FormStatus' }).find('.spinner')
+
+    expect(spinner.exists()).toBe(true)
   })
 })
