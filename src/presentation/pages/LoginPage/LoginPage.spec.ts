@@ -34,6 +34,31 @@ const maketSut = (params?: SutParams): SutTypes => {
   }
 }
 
+const simulateValidSubmit = async (
+  sut: VueWrapper,
+  email: string = faker.internet.email(),
+  password: string = faker.internet.password()
+): Promise<void> => {
+  await populateEmailField(sut, email)
+  await populatePasswordField(sut, password)
+
+  await sut.find('form').trigger('submit.prevent')
+}
+
+const populateEmailField = async (
+  sut: VueWrapper,
+  email: string = faker.internet.email()
+): Promise<void> => {
+  await sut.find('input[type="email"]').setValue(email)
+}
+
+const populatePasswordField = async (
+  sut: VueWrapper,
+  password: string = faker.internet.password()
+): Promise<void> => {
+  await sut.find('input[type="password"]').setValue(password)
+}
+
 describe('Login Page', () => {
   test('Should start with initial state', () => {
     const { sut } = maketSut()
@@ -55,7 +80,7 @@ describe('Login Page', () => {
     const { sut, validationSpy } = maketSut()
     const email = faker.internet.email()
 
-    await sut.find('input[type="email"]').setValue(email)
+    await populateEmailField(sut, email)
 
     expect(validationSpy.fieldName).toBe('email')
     expect(validationSpy.fieldValue).toBe(email)
@@ -65,7 +90,7 @@ describe('Login Page', () => {
     const { sut, validationSpy } = maketSut()
     const password = faker.internet.password()
 
-    await sut.find('input[type="password"]').setValue(password)
+    await populatePasswordField(sut, password)
 
     expect(validationSpy.fieldName).toBe('password')
     expect(validationSpy.fieldValue).toBe(password)
@@ -76,7 +101,7 @@ describe('Login Page', () => {
       validationError: faker.random.words(),
     })
 
-    await sut.find('input[type="email"]').setValue(faker.internet.email())
+    await populateEmailField(sut)
 
     const emailStatus = sut
       .findAllComponents({ name: 'AppInput' })
@@ -93,7 +118,7 @@ describe('Login Page', () => {
       validationError: faker.random.words(),
     })
 
-    await sut.find('input[type="password"]').setValue(faker.internet.password())
+    await populatePasswordField(sut)
 
     const passwordStatus = sut
       .findAllComponents({ name: 'AppInput' })
@@ -108,7 +133,7 @@ describe('Login Page', () => {
   test('Should show valid password state if Validation succeeds', async () => {
     const { sut } = maketSut()
 
-    await sut.find('input[type="password"]').setValue(faker.internet.password())
+    await populatePasswordField(sut)
 
     const passwordStatus = sut
       .findAllComponents({ name: 'AppInput' })
@@ -123,11 +148,11 @@ describe('Login Page', () => {
   test('Should show valid email state if Validation succeeds', async () => {
     const { sut } = maketSut()
 
-    await sut.find('input[type="password"]').setValue(faker.internet.password())
+    await populateEmailField(sut)
 
     const passwordStatus = sut
       .findAllComponents({ name: 'AppInput' })
-      .find((c) => c.props().type === 'password')
+      .find((c) => c.props().type === 'email')
 
     const span = passwordStatus.find('span')
 
@@ -138,8 +163,8 @@ describe('Login Page', () => {
   test('Should enable submit button if form is valid', async () => {
     const { sut } = maketSut()
 
-    await sut.find('input[type="email"]').setValue(faker.internet.email())
-    await sut.find('input[type="password"]').setValue(faker.internet.password())
+    await populateEmailField(sut)
+    await populatePasswordField(sut)
 
     const submitButton = sut.find('button[type="submit"]')
     expect(submitButton.attributes('disabled')).toBe('false')
@@ -148,10 +173,7 @@ describe('Login Page', () => {
   test('Should show spinner on submit', async () => {
     const { sut } = maketSut()
 
-    await sut.find('input[type="email"]').setValue(faker.internet.email())
-    await sut.find('input[type="password"]').setValue(faker.internet.password())
-
-    await sut.find('form').trigger('submit.prevent')
+    await simulateValidSubmit(sut)
 
     const spinner = sut.findComponent({ name: 'FormStatus' }).find('.spinner')
 
@@ -160,17 +182,23 @@ describe('Login Page', () => {
 
   test('Should call Authentication with correct values', async () => {
     const { sut, authenticationSpy } = maketSut()
-
     const email = faker.internet.email()
     const password = faker.internet.password()
 
-    await sut.find('input[type="email"]').setValue(email)
-    await sut.find('input[type="password"]').setValue(password)
-    await sut.find('form').trigger('submit.prevent')
+    await simulateValidSubmit(sut, email, password)
 
     expect(authenticationSpy.params).toEqual({
       email,
       password,
     })
+  })
+
+  test('Should call Authentication only once', async () => {
+    const { sut, authenticationSpy } = maketSut()
+
+    await simulateValidSubmit(sut)
+    await simulateValidSubmit(sut)
+
+    expect(authenticationSpy.callsCount).toBe(1)
   })
 })
