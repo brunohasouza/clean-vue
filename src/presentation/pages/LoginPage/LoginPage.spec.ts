@@ -194,11 +194,13 @@ describe('Login Page', () => {
   })
 
   test('Should call Authentication only once', async () => {
-    const { sut, authenticationSpy } = maketSut()
+    const { sut, authenticationSpy } = maketSut({
+      validationError: faker.random.words(),
+    })
 
-    await simulateValidSubmit(sut)
-    await simulateValidSubmit(sut)
+    await populateEmailField(sut)
+    await sut.find('form').trigger('submit.prevent')
 
-    expect(authenticationSpy.callsCount).toBe(1)
+    expect(authenticationSpy.callsCount).toBe(0)
   })
 })
