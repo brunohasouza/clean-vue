@@ -4,18 +4,18 @@
     <form @submit.prevent="handleSubmit">
       <h2>Login</h2>
       <app-input
+        v-model="state.email"
         type="email"
         name="email"
         placeholder="Digite seu e-mail"
         :error="state.emailError"
-        v-model="state.email"
       ></app-input>
       <app-input
+        v-model="state.password"
         type="password"
         name="password"
         placeholder="Digite sua senha"
         :error="state.passwordError"
-        v-model="state.password"
       ></app-input>
       <button class="submit" type="submit" :disabled="disabled">Entrar</button>
       <span class="link">Criar Conta</span>
@@ -61,6 +61,10 @@
   )
 
   const handleSubmit = async (): Promise<void> => {
+    if (state.isLoading) {
+      return
+    }
+
     state.isLoading = true
     await props.authentication.auth({
       email: state.email,
