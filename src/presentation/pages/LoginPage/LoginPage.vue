@@ -61,7 +61,7 @@
   )
 
   const handleSubmit = async (): Promise<void> => {
-    if (state.isLoading) {
+    if (state.isLoading || disabled.value) {
       return
     }
 
