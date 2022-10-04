@@ -3,20 +3,7 @@ import { mount, VueWrapper } from '@vue/test-utils'
 import { faker } from '@faker-js/faker'
 
 import LoginPage from './LoginPage.vue'
-import { ValidationSpy } from '@/presentation/test'
-import { Authentication, AuthenticationParams } from '@/domain/usecases'
-import { AccountModel } from '@/domain/models'
-import { mockAccountModel } from '@/domain/test'
-
-class AuthenticationSpy implements Authentication {
-  account = mockAccountModel()
-  params: AuthenticationParams
-
-  async auth(params: AuthenticationParams): Promise<AccountModel> {
-    this.params = params
-    return Promise.resolve(this.account)
-  }
-}
+import { AuthenticationSpy, ValidationSpy } from '@/presentation/test'
 
 type SutTypes = {
   sut: VueWrapper
