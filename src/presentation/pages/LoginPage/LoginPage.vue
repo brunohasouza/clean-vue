@@ -38,9 +38,11 @@
   } from '@/presentation/components'
   import { StateProps } from './LoginPage-types'
   import { Validation } from '@/presentation/protocols/validation'
+  import { Authentication } from '@/domain/usecases'
 
   type LoginProps = {
     validation: Validation
+    authentication: Authentication
   }
 
   const props = defineProps<LoginProps>()
@@ -58,8 +60,12 @@
     () => !!state.emailError || !!state.passwordError
   )
 
-  const handleSubmit = (): void => {
+  const handleSubmit = async (): Promise<void> => {
     state.isLoading = true
+    await props.authentication.auth({
+      email: state.email,
+      password: state.password,
+    })
   }
 
   provide('$state', () => state)
