@@ -230,18 +230,26 @@ describe('Login Page', () => {
 
   test('Should add accessToken to localStorage on success', async () => {
     const { sut, authenticationSpy } = maketSut()
-    vi.spyOn(window.localStorage, 'setItem').mockReturnValueOnce(null)
+    const replace = vi.spyOn(router, 'replace')
+    const setItem = vi
+      .spyOn(window.localStorage, 'setItem')
+      .mockReturnValueOnce(null)
+
     await simulateValidSubmit(sut)
-    expect(localStorage.setItem).toHaveBeenCalledWith(
+    expect(setItem).toHaveBeenCalledWith(
       'accessToken',
       authenticationSpy.account.accessToken
     )
+
+    expect(replace).toHaveBeenCalledTimes(1)
+    expect(replace).toHaveBeenCalledWith('/')
   })
 
   test('Should go to signup page', async () => {
     const { sut } = maketSut()
     const push = vi.spyOn(router, 'push')
     const register = sut.find('a.link')
+
     await register.trigger('click')
 
     expect(push).toHaveBeenCalledTimes(1)
