@@ -67,10 +67,11 @@
 
     try {
       state.isLoading = true
-      await props.authentication.auth({
+      const account = await props.authentication.auth({
         email: state.email,
         password: state.password,
       })
+      localStorage.setItem('accessToken', account.accessToken)
     } catch (error) {
       state.isLoading = false
       state.mainError = error.message
