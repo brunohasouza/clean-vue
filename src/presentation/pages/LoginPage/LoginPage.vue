@@ -65,11 +65,16 @@
       return
     }
 
-    state.isLoading = true
-    await props.authentication.auth({
-      email: state.email,
-      password: state.password,
-    })
+    try {
+      state.isLoading = true
+      await props.authentication.auth({
+        email: state.email,
+        password: state.password,
+      })
+    } catch (error) {
+      state.isLoading = false
+      state.mainError = error.message
+    }
   }
 
   provide('$state', () => state)
