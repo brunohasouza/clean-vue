@@ -6,7 +6,6 @@
 </template>
 
 <script setup lang="ts">
-  import { watch } from 'vue'
   import { AppSpinner } from '@/presentation/components'
 
   interface Props {
@@ -14,12 +13,7 @@
     error: string
   }
 
-  const props = defineProps<Props>()
-
-  watch(
-    () => props.loading,
-    () => console.log(props.loading)
-  )
+  defineProps<Props>()
 </script>
 
 <style scoped>

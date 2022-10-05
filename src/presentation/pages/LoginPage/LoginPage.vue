@@ -18,7 +18,7 @@
         :error="state.passwordError"
       ></app-input>
       <button class="submit" type="submit" :disabled="disabled">Entrar</button>
-      <span class="link">Criar Conta</span>
+      <router-link to="/signup" :class="'link'">Criar Conta</router-link>
       <form-status
         :loading="state.isLoading"
         :error="state.mainError"
