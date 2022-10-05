@@ -1,9 +1,10 @@
-import { describe, test, expect } from 'vitest'
+import { describe, test, expect, vi } from 'vitest'
 import { mount, VueWrapper } from '@vue/test-utils'
 import { faker } from '@faker-js/faker'
 
 import LoginPage from './LoginPage.vue'
 import { AuthenticationSpy, ValidationSpy } from '@/presentation/test'
+import { InvalidCredentialsError } from '@/domain/errors'
 
 type SutTypes = {
   sut: VueWrapper
@@ -202,5 +203,23 @@ describe('Login Page', () => {
     await sut.find('form').trigger('submit.prevent')
 
     expect(authenticationSpy.callsCount).toBe(0)
+  })
+
+  test('Should present error if Authentication fails', async () => {
+    const { sut, authenticationSpy } = maketSut()
+    const error = new InvalidCredentialsError()
+    vi.spyOn(authenticationSpy, 'auth').mockReturnValueOnce(
+      Promise.reject(error)
+    )
+    await simulateValidSubmit(sut)
+
+    const formStatus = sut.findComponent({ name: 'FormStatus' })
+
+    const mainError = formStatus.find('span.error')
+    const spinner = formStatus.find('.spinner')
+
+    expect(mainError.exists()).toBe(true)
+    expect(spinner.exists()).toBe(false)
+    expect(mainError.element.textContent).toBe(error.message)
   })
 })
