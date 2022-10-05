@@ -30,6 +30,7 @@
 
 <script setup lang="ts">
   import { provide, reactive, watch, computed } from 'vue'
+  import { useRouter } from 'vue-router'
   import {
     LoginHeader,
     AppFooter,
@@ -44,6 +45,8 @@
     validation: Validation
     authentication: Authentication
   }
+
+  const router = useRouter()
 
   const props = defineProps<LoginProps>()
 
@@ -72,6 +75,7 @@
         password: state.password,
       })
       localStorage.setItem('accessToken', account.accessToken)
+      router.replace('/')
     } catch (error) {
       state.isLoading = false
       state.mainError = error.message
