@@ -64,22 +64,39 @@ const populatePasswordField = async (
   await sut.find('input[type="password"]').setValue(password)
 }
 
+const testStatusForField = (
+  sut: VueWrapper,
+  type: string,
+  validationError?: string
+): void => {
+  const appInput = sut
+    .findAllComponents({ name: 'AppInput' })
+    .find((c) => c.props().type === type)
+  expect(appInput.exists()).toBe(true)
+
+  const status = appInput.find('span.status')
+
+  expect(status.attributes('title')).toBe(validationError || 'Tudo certo!')
+  expect(status.element.textContent).toBe(validationError ? '🔴' : '🟢')
+}
+
+const testButtonIsDisabled = (sut: VueWrapper, isDisabled: boolean): void => {
+  const button = sut.find('button[type="submit"]')
+  expect(button.attributes('disabled')).toBe(`${isDisabled}`)
+}
+
 describe('Login Page', () => {
   beforeEach(() => localStorage.clear())
   test('Should start with initial state', () => {
-    const { sut } = maketSut()
+    const validationError = 'Campo obrigatório'
+    const { sut } = maketSut({ validationError })
     const formStatus = sut.findComponent({ name: 'FormStatus' })
-    const submitBtn = sut.find('button[type="submit"]')
-    const fieldStatus = sut.findAllComponents({ name: 'AppInput' })
-    const errorStatus = fieldStatus.filter((value: VueWrapper) => {
-      const span = value.find('span.status')
-
-      return span.element.textContent === '🔴'
-    })
 
     expect(formStatus.element.childElementCount).toBe(0)
-    expect(submitBtn.attributes().disabled).toBeDefined()
-    expect(errorStatus.length).toBe(2)
+
+    testButtonIsDisabled(sut, true)
+    testStatusForField(sut, 'email', validationError)
+    testStatusForField(sut, 'password', validationError)
   })
 
   test('Should call Validation with correct email', async () => {
@@ -109,14 +126,7 @@ describe('Login Page', () => {
 
     await populateEmailField(sut)
 
-    const emailStatus = sut
-      .findAllComponents({ name: 'AppInput' })
-      .find((c) => c.props().type === 'email')
-
-    const span = emailStatus.find('span')
-
-    expect(span.attributes('title')).toBe(validationSpy.errorMessage)
-    expect(span.element.textContent).toBe('🔴')
+    testStatusForField(sut, 'email', validationSpy.errorMessage)
   })
 
   test('Should show password error if Validation fails', async () => {
@@ -126,14 +136,7 @@ describe('Login Page', () => {
 
     await populatePasswordField(sut)
 
-    const passwordStatus = sut
-      .findAllComponents({ name: 'AppInput' })
-      .find((c) => c.props().type === 'password')
-
-    const span = passwordStatus.find('span')
-
-    expect(span.attributes('title')).toBe(validationSpy.errorMessage)
-    expect(span.element.textContent).toBe('🔴')
+    testStatusForField(sut, 'password', validationSpy.errorMessage)
   })
 
   test('Should show valid password state if Validation succeeds', async () => {
@@ -141,14 +144,7 @@ describe('Login Page', () => {
 
     await populatePasswordField(sut)
 
-    const passwordStatus = sut
-      .findAllComponents({ name: 'AppInput' })
-      .find((c) => c.props().type === 'password')
-
-    const span = passwordStatus.find('span')
-
-    expect(span.attributes('title')).toBe('Tudo certo!')
-    expect(span.element.textContent).toBe('🟢')
+    testStatusForField(sut, 'password')
   })
 
   test('Should show valid email state if Validation succeeds', async () => {
@@ -156,14 +152,7 @@ describe('Login Page', () => {
 
     await populateEmailField(sut)
 
-    const passwordStatus = sut
-      .findAllComponents({ name: 'AppInput' })
-      .find((c) => c.props().type === 'email')
-
-    const span = passwordStatus.find('span')
-
-    expect(span.attributes('title')).toBe('Tudo certo!')
-    expect(span.element.textContent).toBe('🟢')
+    testStatusForField(sut, 'email')
   })
 
   test('Should enable submit button if form is valid', async () => {
@@ -172,8 +161,7 @@ describe('Login Page', () => {
     await populateEmailField(sut)
     await populatePasswordField(sut)
 
-    const submitButton = sut.find('button[type="submit"]')
-    expect(submitButton.attributes('disabled')).toBe('false')
+    testButtonIsDisabled(sut, false)
   })
 
   test('Should show spinner on submit', async () => {
