@@ -5,6 +5,7 @@ import { faker } from '@faker-js/faker'
 import LoginPage from './LoginPage.vue'
 import { AuthenticationSpy, ValidationSpy } from '@/presentation/test'
 import { InvalidCredentialsError } from '@/domain/errors'
+import router from '@/presentation/router'
 
 type SutTypes = {
   sut: VueWrapper
@@ -25,6 +26,9 @@ const maketSut = (params?: SutParams): SutTypes => {
     props: {
       validation: validationSpy,
       authentication: authenticationSpy,
+    },
+    global: {
+      plugins: [router],
     },
   })
 
@@ -232,5 +236,15 @@ describe('Login Page', () => {
       'accessToken',
       authenticationSpy.account.accessToken
     )
+  })
+
+  test('Should go to signup page', async () => {
+    const { sut } = maketSut()
+    const push = vi.spyOn(router, 'push')
+    const register = sut.find('a.link')
+    await register.trigger('click')
+
+    expect(push).toHaveBeenCalledTimes(1)
+    expect(push).toHaveBeenCalledWith('/signup')
   })
 })
