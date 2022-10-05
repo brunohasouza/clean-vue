@@ -1,4 +1,4 @@
-import { describe, test, expect, vi } from 'vitest'
+import { describe, test, expect, vi, beforeEach } from 'vitest'
 import { mount, VueWrapper } from '@vue/test-utils'
 import { faker } from '@faker-js/faker'
 
@@ -61,6 +61,7 @@ const populatePasswordField = async (
 }
 
 describe('Login Page', () => {
+  beforeEach(() => localStorage.clear())
   test('Should start with initial state', () => {
     const { sut } = maketSut()
     const formStatus = sut.findComponent({ name: 'FormStatus' })
@@ -221,5 +222,15 @@ describe('Login Page', () => {
     expect(mainError.exists()).toBe(true)
     expect(spinner.exists()).toBe(false)
     expect(mainError.element.textContent).toBe(error.message)
+  })
+
+  test('Should add accessToken to localStorage on success', async () => {
+    const { sut, authenticationSpy } = maketSut()
+    vi.spyOn(window.localStorage, 'setItem').mockReturnValueOnce(null)
+    await simulateValidSubmit(sut)
+    expect(localStorage.setItem).toHaveBeenCalledWith(
+      'accessToken',
+      authenticationSpy.account.accessToken
+    )
   })
 })
