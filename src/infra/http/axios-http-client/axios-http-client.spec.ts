@@ -2,7 +2,7 @@ import { describe, expect, test, vi, Mocked } from 'vitest'
 import axios from 'axios'
 
 import { AxiosHttpClient } from './axios-http-client'
-import { mockAxios } from '@/infra/test'
+import { mockAxios, mockHttpResponse } from '@/infra/test'
 import { mockPostRequest } from '@/data/test'
 
 vi.mock('axios')
@@ -39,5 +39,17 @@ describe('AxiosHttpClient', () => {
       statusCode: mockedAxios.post.mock.results[0].value.status,
       body: mockedAxios.post.mock.results[0].value.data,
     })
+  })
+
+  test.skip('Should return the correct statusCode and body on failure', () => {
+    const { sut, mockedAxios } = makeSut()
+    mockedAxios.post.mockRejectedValueOnce({
+      response: mockHttpResponse(),
+    })
+
+    const promise = sut.post(mockPostRequest())
+    expect(promise).resolves.toMatchObject(
+      mockedAxios.post.mock.results[0].value
+    )
   })
 })
