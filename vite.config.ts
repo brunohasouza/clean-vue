@@ -13,6 +13,9 @@ export default defineConfig({
   },
   test: {
     environment: 'happy-dom',
+    coverage: {
+      provider: 'istanbul',
+    },
   },
   resolve: {
     alias: {

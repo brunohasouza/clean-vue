@@ -3,4 +3,4 @@ node_js:
   - 14.18
 script:
   - npm run lint:script
-  - npm run test:ci
+  - npm run test:coveralls

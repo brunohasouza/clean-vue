@@ -10,6 +10,7 @@
     "test": "vitest",
     "test:ci": "vitest run --coverage",
     "test:staged": "vitest run -- --changed",
+    "test:coveralls": "npm run test:ci && coveralls < coverave/lcov.info",
     "lint:script": "eslint --ext .ts,vue --ignore-path .gitignore .",
     "prepare": "husky install",
     "check": "npx npm-check -u -s"
@@ -36,6 +37,7 @@
     "@vue/eslint-config-typescript": "^11.0.2",
     "@vue/test-utils": "^2.1.0",
     "autoprefixer": "^10.4.12",
+    "coveralls": "^3.1.1",
     "eslint": "^8.26.0",
     "eslint-plugin-prettier": "^4.2.1",
     "eslint-plugin-vue": "^9.6.0",
