@@ -14,7 +14,7 @@ export default defineConfig({
   test: {
     environment: 'happy-dom',
     coverage: {
-      provider: 'istanbul',
+      provider: 'c8',
     },
   },
   resolve: {
