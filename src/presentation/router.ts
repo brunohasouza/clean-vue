@@ -1,9 +1,14 @@
-import { createRouter, createWebHistory } from 'vue-router'
-import { LoginPage } from './pages'
+import { makeLogin } from '@/main/factories/pages/login/login-factory'
+import {
+  createRouter,
+  createWebHistory,
+  Router,
+  RouteRecordRaw,
+} from 'vue-router'
 
-const routes = [{ path: '/login', component: LoginPage }]
+const routes: RouteRecordRaw[] = [makeLogin()]
 
-const router = createRouter({
+const router: Router = createRouter({
   history: createWebHistory(),
   routes,
 })
