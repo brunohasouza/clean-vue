@@ -82,7 +82,13 @@ const testStatusForField = (
 
 const testButtonIsDisabled = (sut: VueWrapper, isDisabled: boolean): void => {
   const button = sut.find('button[type="submit"]')
-  expect(button.attributes('disabled')).toBe(`${isDisabled}`)
+  const disabled = button.attributes('disabled')
+
+  if (isDisabled) {
+    expect(disabled).toBeDefined()
+  } else {
+    expect(disabled).toBeUndefined()
+  }
 }
 
 describe('Login Page', () => {
