@@ -1,2 +1,2 @@
 export const makeApiUrl = (path: string): string =>
-  `http://fordevs.herokuapp.com/api${path}`
+  `${import.meta.env.VITE_API_URL}${path}`
