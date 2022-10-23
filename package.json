@@ -10,7 +10,7 @@
     "test": "vitest",
     "test:ci": "vitest run --coverage",
     "test:staged": "vitest run -- --changed",
-    "test:coveralls": "npm run test:ci && coveralls < coverave/lcov.info",
+    "test:coveralls": "npm run test:ci && coveralls < coverage/clover.xml",
     "lint:script": "eslint --ext .ts,vue --ignore-path .gitignore .",
     "prepare": "husky install",
     "check": "npx npm-check -u -s"
