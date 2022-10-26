@@ -1,4 +1,5 @@
 [![Build Status](https://app.travis-ci.com/brunohasouza/clean-vue.svg?branch=main)](https://app.travis-ci.com/brunohasouza/clean-vue)
+[![Coverage Status](https://coveralls.io/repos/github/brunohasouza/clean-vue/badge.svg?branch=main)](https://coveralls.io/github/brunohasouza/clean-vue?branch=main)
 
 # Vue 3 + TypeScript + Vite
 
