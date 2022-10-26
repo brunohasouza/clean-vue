@@ -1,7 +1,7 @@
 {
   "name": "clean-front",
   "private": true,
-  "version": "1.2.1",
+  "version": "1.2.2",
   "type": "module",
   "scripts": {
     "dev": "vite",
@@ -10,7 +10,7 @@
     "test": "vitest",
     "test:ci": "vitest run --coverage",
     "test:staged": "vitest run -- --changed",
-    "test:coveralls": "npm run test:ci && coveralls < coverage/clover.xml",
+    "test:coveralls": "npm run test:ci && coveralls < ./coverage/lcov.info",
     "lint:script": "eslint --ext .ts,vue --ignore-path .gitignore .",
     "prepare": "husky install",
     "check": "npx npm-check -u -s"

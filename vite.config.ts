@@ -15,6 +15,7 @@ export default defineConfig({
     environment: 'happy-dom',
     coverage: {
       provider: 'c8',
+      reporter: ['lcov', 'html'],
     },
   },
   resolve: {
